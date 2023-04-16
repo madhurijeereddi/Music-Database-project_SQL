@@ -1,0 +1,65 @@
+Question 1: Top 5 customers with the least amount of purchases?
+
+select c.CustomerId , sum(l.unitprice) as amt
+from Customer c
+join Invoice i
+on i.CustomerId=c.CustomerId
+join InvoiceLine l
+on i.InvoiceId=l.InvoiceId
+group by c.CustomerId
+order by amt 
+limit 5
+
+
+Question 2: Who is most popular artist in each country?
+
+select sub.*
+from (
+SELECT count(i.invoiceLineId) as purchases , c.Country,a.Name, a.ArtistId
+from InvoiceLine i
+join track t
+on i.TrackId=t.TrackId
+join Album b
+on t.AlbumId=b.AlbumId
+join Invoice v
+on i.InvoiceId=v.InvoiceId
+join Customer c
+on v.CustomerId=c.CustomerId
+join Artist a
+on a.ArtistId=b.ArtistId
+group by a.Name, c.Country
+order by c.Country
+) sub
+group by sub.Country
+having sub.purchases = max(sub.purchases)
+
+
+Question 3: Who is writing Metal music?
+
+select  a.ArtistId, a.Name, count(g.name)
+from Genre g
+join Track t
+on g.GenreId=t.GenreId
+JOIN Album b
+on t.AlbumId=b.AlbumId
+join Artist a
+on b.ArtistId=a.ArtistId
+where (g.Name)='Metal'
+group by a.ArtistId
+order by count(g.name) DESC
+LIMIT 10
+
+
+Question 4: Which playlist has earned most according to the invoiceline?
+
+select p.name, sum(i.unitprice) as amtspent
+from Playlist p
+JOIN PlaylistTrack l
+on p.PlaylistId=l.PlaylistId
+join Track t
+on l.TrackId=t.TrackId
+join InvoiceLine i
+on t.TrackId=i.TrackId
+group by p.Name
+order by amtspent DESC
+LIMIT 5
