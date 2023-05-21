@@ -34,7 +34,7 @@ group by sub.Country
 having sub.purchases = max(sub.purchases)
 
 
-Question 3: Who is writing Metal music?
+Question 3: Who are top 10 metal music writers?
 
 select  a.ArtistId, a.Name, count(g.name)
 from Genre g
@@ -47,7 +47,7 @@ on b.ArtistId=a.ArtistId
 where (g.Name)='Metal'
 group by a.ArtistId
 order by count(g.name) DESC
-LIMIT 10
+limit 10
 
 
 Question 4: Which playlist has earned most according to the invoiceline?
